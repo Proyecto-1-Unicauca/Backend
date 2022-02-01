@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "physics-lab-1501c",
+  "private_key_id": "dbe1c7a5cb3ddc6fa538e90bd1740f5dd6956757",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQDjZKe84siFCzjd\ngQ1pVQkJD4gvd+3pMrcfRASBSMiVpJXK7UvlRvteTDyJrKHY268/G0MWdgnzCgIs\nndw81EVVJ2PQItFmH2CzNUvjx2mUZVYBUnZzvS3AvZBuUX6L8fXPXsuS/04dTj8E\nLBlgAYPNDvvffKS1mogk9SUg3nTzsdc2qhCV6dDm5Ef7c4zs301j5y8P+SqaNX/Z\ntGOHcj2OK3BhEb/EPB1MxEdKOhL3VTCsXUctNCy+dy6JmtKCmWhqhQiEXHjtiuMW\nf/BtwDPpHGfzs+9lIK4aySkdhVGOt6vIzYMWH1IVfYJRRSQKMakl26W6Qc2aZi3a\nl5ysj+6rAgMBAAECggEAOW243T/rQ4qXhH2szO7gdszY6KAh0lTwIbHUb3BZ1E06\nVYNDuTaJkoGvgle6kmG9KzNv6JLMJXjgHrOJpUU4824cy7qXZvLCwc/SiEbbF9LV\n+0R/zPA4x2Y4vVvQmXh0y7gVstzOtiEGUj/u8qu/RUElBIbetEzAWJEfHOOB5u+H\nzDVrSHuEvmJx0TkdCSIXQiOM/FKAMCIycTNYnIspA8XzYJb0Iz/QimMnTolQeWJy\n65SmWoESZsFL5Vx0PbLT2V+SFYFDxXpgZPfyL7iNfWaXIxIyIgUQAd8ZnitzUVN3\nTmeR0mZw2CYYax/C5t9pT6OiEYZxP1h4QOTAiZXZaQKBgQD5BEwcWECWeHiSQKo7\nRYTiDfwym4Hv/14z4hoaxtuciMOGbxeAM7/4gq/sZ1+FhaKsl197M4zNvjZAgPZO\nJ69FnPQd1dnx3NVB59PRKDSrOCnIc4FbVru0WCNsLovaQ67ZcrOJnrQV+H1h0xYA\nRO8A7z+QyRJcnl+qm2DhNi6LmQKBgQDpxR8BBpgkPt9mJGkoSp6dSkJDiPGwEOLP\nh7AIlPmvia3eQmZxfQNL6OLzaOk3BxHjQchKRnyVXKxChuC8V8YU+PWrKnDIZr3g\nHJgTHq5K4OjHHd6XDbALL07sMDhujM+JuqVT2P7O6HPlPGSbusTctQV2T7f8h6gz\nrgDBAoMW4wKBgBlQLIR9HCOvn2IOnL9ls7pe/ZIPaMgCx4qyo0CxkkV5SZby2Aq6\nN/uFHWkEoRsrmHu+73/Qn7GScmVgNql/Mzv6Vn5p7Lu/XRZUAJ40XhZBoU21ICMu\nz+nnQ8KNgL3xP2bvV/zXWysYlXZKRORGHZ2UtHt9VRaBKuxm2xRJs7WRAoGAC/lx\n7h6FWo3x6YyB6nNwDoSIQmdYYflrdM/xf28KHyjBRDpIfxW1PoUuYuOD1rLBAtAS\nz2Mu7IOzuzCngF5KojZidyMUZd+FaF5ul8Qhj2pX4iMwjLJBy0DgHQ8XROpnkxmB\ncHsUCksz7JEcYjG99cQ8BGRu+zuDrSoDld9oEZsCgYB1SfKnKi5/65LFYK7HuQSN\nqE8mR1pF2LqHHRXE3J6RUkdNg0v5BgRKLdAyAPdq8oDxL8eeL2jLEKAWuFOGiiGO\nKyI8JatWmg6nKXz43PWFEmg+Z9wuHk7KVEZDf6FyVRDEnlgZKD5BIMtnQQksAOrg\nM0/PVV1s5qmCH9vv5400dQ==\n-----END PRIVATE KEY-----\n",
+  "client_email": "firebase-adminsdk-yo3gm@physics-lab-1501c.iam.gserviceaccount.com",
+  "client_id": "117329779817392758830",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-yo3gm%40physics-lab-1501c.iam.gserviceaccount.com"
+}
