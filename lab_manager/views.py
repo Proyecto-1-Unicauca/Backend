@@ -15,6 +15,27 @@ def index(request):
     return render(request, "general/index.html")
 
 @csrf_exempt
+def workshops(request):
+    if request.method == "POST":
+        data = json.loads(request.body.decode("utf-8"))
+
+        newWorkshop = {
+            u'topic_id': data['topic_id'],
+            u'course_id': data['course_id'],
+            u'data': data['data'],
+            u'start_available': data['start_available'],
+            u'end_available': data['end_available']
+        }
+
+        try:
+            db.collection(u'workshop').add(newWorkshop)
+            return JsonResponse({ "message": "User created" }, status=201)
+        except ValueError:
+            return JsonResponse({ "message": "User not created" }, status=201)
+    else:
+        return JsonResponse({"message": "Invalid action"}, status=201)
+
+@csrf_exempt
 def validate_email(request):
     if request.method == "POST":
         data = json.loads(request.body.decode("utf-8"))
@@ -26,7 +47,7 @@ def validate_email(request):
         if(query_ref):
             for teacher in query_ref:
                 return JsonResponse({"message": "User found", "userId": teacher.id, "username": teacher.to_dict()['name']}, status=201)
-
-            
-    
-    return JsonResponse({"message": "User not found"}, status=201)
+        else:
+            return JsonResponse({"message": "User not found"}, status=201)
+    else:
+        return JsonResponse({"message": "Invalid action"}, status=201)
