@@ -51,3 +51,32 @@ def validate_email(request):
             return JsonResponse({"message": "User not found"}, status=201)
     else:
         return JsonResponse({"message": "Invalid action"}, status=201)
+
+@csrf_exempt
+def subjects(request):
+    if request.method == "POST":
+        data = json.loads(request.body.decode("utf-8"))
+
+        newSubject = {
+            u'id': data['id'],
+            u'name': data['name']
+        }
+        try:
+            db.collection(u'subjects').add(newSubject)
+            return JsonResponse({"message": "new subject registered"}, status=201)
+        except ValueError:
+            return JsonResponse({"message": "error creating new subject"}, status=201)
+    elif request.method == "GET":
+        data = json.loads(request.body.decode("utf-8"))
+        id_get = data['id']
+        subject_ref = db.collection(u'subjects')
+        query_ref = subject_ref.where(u'id', u'==', id_get).limit(1).get()
+
+        if query_ref:
+            for subject in query_ref:
+                return JsonResponse({"message": "Subject found", "subjectId": subject.id, "subjectName": subject.to_dict()['name']}, status=201)
+        else:
+            return JsonResponse({"message": "Subject not found"}, status=201)
+    else:
+        return JsonResponse({"message": "Invalid action"}, status=201)
+
