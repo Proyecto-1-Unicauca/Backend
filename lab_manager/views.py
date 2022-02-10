@@ -105,16 +105,16 @@ def courses(request):
     if request.method == "DELETE":
         data = json.loads(request.body.decode("utf-8"))
         course_id = data['course_id']
-        courses_ref = db.collection(u'courses')
-        query_ref = courses_ref.where(FieldPath.document_id(), u'==', course_id).limit(1).get()
+        courses_ref = db.collection(u'courses').document(course_id)
 
-        if query_ref:
-            for course in query_ref:
-                try:
-                    course.delete()
-                    return JsonResponse({"message": "Course deleted"}, status=201)
-                except ValueError:
-                    return JsonResponse({"message": "error deleting course"}, status=201)
+        doc = courses_ref.get()
+
+        if doc.exists:
+            try:
+                doc.reference.delete()
+                return JsonResponse({"message": "Course deleted"}, status=201)
+            except ValueError:
+                return JsonResponse({"message": "error deleting course"}, status=201)
         else:
             return JsonResponse({"message": "course not found"}, status=201)
 
