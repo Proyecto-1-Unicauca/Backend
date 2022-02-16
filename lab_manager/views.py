@@ -14,32 +14,8 @@ cred = credentials.Certificate('PrivateKey.json')
 firebase_admin.initialize_app(cred)
 db = firestore.client()
 
-
 def index(request):
     return render(request, "general/index.html")
-
-
-@csrf_exempt
-def workshops(request):
-    if request.method == "POST":
-        data = json.loads(request.body.decode("utf-8"))
-
-        newWorkshop = {
-            u'topic_id': data['topic_id'],
-            u'course_id': data['course_id'],
-            u'data': data['data'],
-            u'start_available': data['start_available'],
-            u'end_available': data['end_available']
-        }
-
-        try:
-            db.collection(u'workshop').add(newWorkshop)
-            return JsonResponse({"message": "User created"}, status=201)
-        except ValueError:
-            return JsonResponse({"message": "User not created"}, status=201)
-    else:
-        return JsonResponse({"message": "Invalid action"}, status=201)
-
 
 @csrf_exempt
 def validate_email(request):
@@ -53,12 +29,89 @@ def validate_email(request):
         if (query_ref):
             for teacher in query_ref:
                 return JsonResponse(
-                    {"message": "User found", "userId": teacher.id, "username": teacher.to_dict()['name']}, status=201)
+                    {"message": "Email found", "userId": teacher.id, "username": teacher.to_dict()['name']}, status=201)
         else:
-            return JsonResponse({"message": "User not found"}, status=201)
+            return JsonResponse({"message": "Email not found"}, status=201)
     else:
         return JsonResponse({"message": "Invalid action"}, status=201)
 
+@csrf_exempt
+def workshops(request):
+    if request.method == "GET":
+        users_ref = db.collection(u'workshops')
+        docs = users_ref.stream()
+        workshops = []
+
+        for doc in docs:
+            docDict = doc.to_dict()
+            workshops.append({
+                "id": doc.id,
+                "topicId": docDict['topic_id'],
+                "courseId": docDict['course_id'],
+                "data": docDict['data'],
+                "startAvailable": docDict['start_available'],
+                "endAvailable": docDict['end_available']
+            })
+        
+        return JsonResponse({"workshops": workshops}, status=201)
+    elif request.method == "POST":
+        data = json.loads(request.body.decode("utf-8"))
+
+        newWorkshop = {
+            u'topic_id': data['topic_id'],
+            u'course_id': data['course_id'],
+            u'data': data['data'],
+            u'start_available': data['start_available'],
+            u'end_available': data['end_available']
+        }
+
+        try:
+            db.collection(u'workshops').add(newWorkshop)
+            return JsonResponse({"message": "Workshop created"}, status=201)
+        except ValueError:
+            return JsonResponse({"message": "Workshop not created"}, status=201)
+    else:
+        return JsonResponse({"message": "Invalid action"}, status=201)
+
+@csrf_exempt
+def workshops_by_id(request, id):
+    if request.method == "GET":
+        try:
+            doc_ref = db.collection(u'workshops').document(id)
+            doc = doc_ref.get()
+
+            if doc.exists:
+                docDict = doc.to_dict()
+                workshop = {
+                "id": doc.id,
+                "topicId": docDict['topic_id'],
+                "courseId": docDict['course_id'],
+                "data": docDict['data'],
+                "startAvailable": docDict['start_available'],
+                "endAvailable": docDict['end_available']
+                }
+                
+                return JsonResponse({"message": "Workshop found", "workshop": workshop}, status=201)
+            else:
+                return JsonResponse({"message": "Workshop not found"}, status=201)
+        except ValueError:
+            return JsonResponse({"message": "Workshop not found"}, status=201)
+    elif request.method == "DELETE":
+        """
+        try:
+            doc_ref = db.collection(u'workshops').document(id)
+            doc = doc_ref.get()
+
+            if doc.exists:
+                db.collection(u'workshops').document(id).delete()
+                return JsonResponse({"message": "Workshop deleted"}, status=201)
+            else:
+                return JsonResponse({"message": "Workshop not found"}, status=201)
+        except ValueError:
+            return JsonResponse({"message": "Workshop not deleted"}, status=201)
+    else:
+        """
+        return JsonResponse({"message": "Invalid action"}, status=201)
 
 @csrf_exempt
 def courses(request):
