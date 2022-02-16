@@ -112,6 +112,8 @@ def workshops_by_id(request, id):
     else:
         """
         return JsonResponse({"message": "Invalid action"}, status=201)
+    else:
+        return JsonResponse({"message": "Invalid action"}, status=201)
 
 @csrf_exempt
 def courses(request):
