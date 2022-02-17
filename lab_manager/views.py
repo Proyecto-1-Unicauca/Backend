@@ -97,7 +97,6 @@ def workshops_by_id(request, id):
         except ValueError:
             return JsonResponse({"message": "Workshop not found"}, status=201)
     elif request.method == "DELETE":
-        """
         try:
             doc_ref = db.collection(u'workshops').document(id)
             doc = doc_ref.get()
@@ -109,9 +108,6 @@ def workshops_by_id(request, id):
                 return JsonResponse({"message": "Workshop not found"}, status=201)
         except ValueError:
             return JsonResponse({"message": "Workshop not deleted"}, status=201)
-    else:
-        """
-        return JsonResponse({"message": "Invalid action"}, status=201)
     else:
         return JsonResponse({"message": "Invalid action"}, status=201)
 
