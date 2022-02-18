@@ -36,6 +36,64 @@ def validate_email(request):
         return JsonResponse({"message": "Invalid action"}, status=201)
 
 @csrf_exempt
+def practices(request):
+    if request.method == "GET":
+        users_ref = db.collection(u'practices')
+        docs = users_ref.stream()
+        practices = []
+
+        for doc in docs:
+            docDict = doc.to_dict()
+            
+            practices.append({
+                "id": doc.id,
+                "workshop_id": docDict['workshop_id'],
+                "leader_id": docDict['leader_id'],
+                "students": docDict['students'],
+                "attendees": docDict['attendees'],
+                "data": docDict['data'],
+                "anomaly": docDict['anomaly'],
+                "next_anomaly_id": docDict['next_anomaly_id'],
+                "start": docDict['start'],
+                "end": docDict['end']
+            })
+        
+        return JsonResponse({"practices": practices}, status=201)
+    else:
+        return JsonResponse({"message": "Invalid action"}, status=201)
+
+@csrf_exempt
+def practices_by_id(request, id):
+    if request.method == "GET":
+        try:
+            doc_ref = db.collection(u'practices').document(id)
+            doc = doc_ref.get()
+
+            if doc.exists:
+                docDict = doc.to_dict()
+                
+                practice = {
+                    "id": doc.id,
+                    "workshop_id": docDict['workshop_id'],
+                    "leader_id": docDict['leader_id'],
+                    "students": docDict['students'],
+                    "attendees": docDict['attendees'],
+                    "data": docDict['data'],
+                    "anomaly": docDict['anomaly'],
+                    "next_anomaly_id": docDict['next_anomaly_id'],
+                    "start": docDict['start'],
+                    "end": docDict['end']
+                }
+                
+                return JsonResponse({"message": "Practice found", "practice": practice}, status=201)
+            else:
+                return JsonResponse({"message": "Practice not found"}, status=201)
+        except ValueError:
+            return JsonResponse({"message": "Practice not found"}, status=201)
+    else:
+        return JsonResponse({"message": "Invalid action"}, status=201)
+
+@csrf_exempt
 def workshops(request):
     if request.method == "GET":
         users_ref = db.collection(u'workshops')
