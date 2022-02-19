@@ -9,5 +9,6 @@ urlpatterns = [
     path("workshops/<str:id>", views.workshops_by_id, name="workshops-by-id"),
     path("validate-email", views.validate_email, name="validate-email"),
     path("courses", views.courses, name="courses"),
+    path("courses/<str:id>", views.courses_by_id, name="courses_by_id"),
     path("subjects", views.subjects, name="subjects")
 ]
