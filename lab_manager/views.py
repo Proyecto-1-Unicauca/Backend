@@ -94,6 +94,26 @@ def practices_by_id(request, id):
         return JsonResponse({"message": "Invalid action"}, status=201)
 
 @csrf_exempt
+def topics(request):
+    if request.method == "GET":
+        users_ref = db.collection(u'topics')
+        docs = users_ref.stream()
+        topics = []
+
+        for doc in docs:
+            docDict = doc.to_dict()
+            
+            topics.append({
+                "id": doc.id,
+                "name": docDict['name'],
+                "subject_id": docDict['subject_id']
+            })
+        
+        return JsonResponse({"topics": topics}, status=201)
+    else:
+        return JsonResponse({"message": "Invalid action"}, status=201)
+
+@csrf_exempt
 def workshops(request):
     if request.method == "GET":
         users_ref = db.collection(u'workshops')
