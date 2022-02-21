@@ -250,6 +250,32 @@ def courses(request):
     return JsonResponse({"message": "Invalid action"}, status=201)
 
 
+@csrf_exempt
+def courses_by_id(request, course_id):
+    if request.method == "GET":
+        try:
+            doc_ref = db.collection(u'courses').document(course_id)
+            doc = doc_ref.get()
+
+            if doc.exists:
+                docDict = doc.to_dict()
+                course = {
+                    "id": doc.id,
+                    "name": docDict['name'],
+                    "access_key": docDict['access_key'],
+                    "start_date": docDict['start'],
+                    "end_date": docDict['end'],
+                    "subject_id": docDict['subject_id'],
+                    "teacher_id": docDict['teacher_id']
+                }
+
+                return JsonResponse({"message": "Course found", "course": course}, status=201)
+            else:
+                return JsonResponse({"message": "Course not found"}, status=201)
+        except ValueError:
+            return JsonResponse({"message": "Course not found"}, status=201)
+
+
 def subjects(request):
     if request.method == "GET":
         subject_ref = db.collection(u'subjects')
