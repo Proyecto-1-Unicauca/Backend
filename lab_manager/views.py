@@ -231,30 +231,12 @@ def courses(request):
         else:
             return JsonResponse({"message": "Teacher course not found"}, status=201)
 
-    if request.method == "DELETE":
-        data = json.loads(request.body.decode("utf-8"))
-        course_id = data['course_id']
-        courses_ref = db.collection(u'courses').document(course_id)
-
-        doc = courses_ref.get()
-
-        if doc.exists:
-            try:
-                doc.reference.delete()
-                return JsonResponse({"message": "Course deleted"}, status=201)
-            except ValueError:
-                return JsonResponse({"message": "error deleting course"}, status=201)
-        else:
-            return JsonResponse({"message": "course not found"}, status=201)
-
-    return JsonResponse({"message": "Invalid action"}, status=201)
-
 
 @csrf_exempt
-def courses_by_id(request, course_id):
+def courses_by_id(request, id):
     if request.method == "GET":
         try:
-            doc_ref = db.collection(u'courses').document(course_id)
+            doc_ref = db.collection(u'courses').document(id)
             doc = doc_ref.get()
 
             if doc.exists:
@@ -274,6 +256,24 @@ def courses_by_id(request, course_id):
                 return JsonResponse({"message": "Course not found"}, status=201)
         except ValueError:
             return JsonResponse({"message": "Course not found"}, status=201)
+
+    if request.method == "DELETE":
+        data = json.loads(request.body.decode("utf-8"))
+        course_id = data['course_id']
+        courses_ref = db.collection(u'courses').document(course_id)
+
+        doc = courses_ref.get()
+
+        if doc.exists:
+            try:
+                doc.reference.delete()
+                return JsonResponse({"message": "Course deleted"}, status=201)
+            except ValueError:
+                return JsonResponse({"message": "error deleting course"}, status=201)
+        else:
+            return JsonResponse({"message": "course not found"}, status=201)
+
+    return JsonResponse({"message": "Invalid action"}, status=201)
 
 
 def subjects(request):
