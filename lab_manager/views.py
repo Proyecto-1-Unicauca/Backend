@@ -210,6 +210,7 @@ def workshops_by_id(request, id):
     else:
         return JsonResponse({"message": "Invalid action"}, status=201)
 
+
 @csrf_exempt
 def courses(request):
     if request.method == "POST":
@@ -230,37 +231,21 @@ def courses(request):
             return JsonResponse({"message": "new course registered"}, status=201)
         except ValueError:
             return JsonResponse({"message": "error creating new subject"}, status=201)
-
-    if request.method == "GET":
-        data = json.loads(request.body.decode("utf-8"))
-        teacher_id = data['teacher_id']
-        courses_ref = db.collection(u'courses')
-        query_ref = courses_ref.where(u'teacher_id', u'==', teacher_id).get()
-
-        teacher_courses_dict = {}
-        teacher_courses_records = []
-
-        if query_ref:
-            for course in query_ref:
-                teacher_course = {"courseId": course.id, "accessKey": course.to_dict()['access_key'],
-                                  "name": course.to_dict()['name'], "start": course.to_dict()['start'],
-                                  "end": course.to_dict()['end'], "subjectId": course.to_dict()['subject_id']}
-                teacher_courses_records.append(teacher_course)
-
-            teacher_courses_dict["courses"] = teacher_courses_records
-            return JsonResponse(teacher_courses_dict, status=201)
-        else:
-            return JsonResponse({"message": "Teacher course not found"}, status=201)
+    else:
+        return JsonResponse({"message": "Invalid action"}, status=201)
 
 
 @csrf_exempt
 def courses_by_id(request, id):
     if request.method == "GET":
         try:
-            doc_ref = db.collection(u'courses').document(id)
-            doc = doc_ref.get()
+            doc_ref = db.collection(u'courses').where(u'teacher_id', u'==', int(id))
+            docs = doc_ref.stream()
 
-            if doc.exists:
+            course_dict = {}
+            course_records = []
+
+            for doc in docs:
                 docDict = doc.to_dict()
                 course = {
                     "id": doc.id,
@@ -271,17 +256,18 @@ def courses_by_id(request, id):
                     "subject_id": docDict['subject_id'],
                     "teacher_id": docDict['teacher_id']
                 }
+                course_records.append(course)
 
-                return JsonResponse({"message": "Course found", "course": course}, status=201)
+            if len(course_records) > 0:
+                course_dict["courses"] = course_records
+                return JsonResponse({"message": "Teacher has courses", "courses": course_dict}, status=201)
             else:
                 return JsonResponse({"message": "Course not found"}, status=201)
         except ValueError:
             return JsonResponse({"message": "Course not found"}, status=201)
 
     if request.method == "DELETE":
-        data = json.loads(request.body.decode("utf-8"))
-        course_id = data['course_id']
-        courses_ref = db.collection(u'courses').document(course_id)
+        courses_ref = db.collection(u'courses').document(id)
 
         doc = courses_ref.get()
 
