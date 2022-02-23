@@ -94,6 +94,27 @@ def practices_by_id(request, id):
         return JsonResponse({"message": "Invalid action"}, status=201)
 
 @csrf_exempt
+def topics_by_id(request,id):
+    if request.method == "GET":
+        try:
+            doc_ref = db.collection(u'topics').document(id)
+            doc = doc_ref.get()
+            if doc.exists:
+                docDict = doc.to_dict()    
+                topic = {
+                    "id": doc.id,
+                    "name": docDict['name'],
+                    "subject_id": docDict['subject_id']
+                }
+                return JsonResponse({"message": "Topic found", "topic": topic}, status=201)
+            else:
+                return JsonResponse({"message": "Topic not found"}, status=201)
+        except ValueError:
+            return JsonResponse({"message": "Topic not found"}, status=201)
+    else:
+        return JsonResponse({"message": "Invalid action"}, status=201)
+
+@csrf_exempt
 def topics(request):
     if request.method == "GET":
         users_ref = db.collection(u'topics')

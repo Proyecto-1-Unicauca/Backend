@@ -6,6 +6,7 @@ urlpatterns = [
     path("practices", views.practices, name="practices"),
     path("practices/<str:id>", views.practices_by_id, name="practices-by-id"),
     path("topics", views.topics, name="topics"),
+    path("topics/<str:id>", views.topics_by_id, name="topics-by-id"),
     path("workshops", views.workshops, name="workshops"),
     path("workshops/<str:id>", views.workshops_by_id, name="workshops-by-id"),
     path("validate-email", views.validate_email, name="validate-email"),
