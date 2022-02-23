@@ -14,8 +14,10 @@ cred = credentials.Certificate('PrivateKey.json')
 firebase_admin.initialize_app(cred)
 db = firestore.client()
 
+
 def index(request):
     return render(request, "general/index.html")
+
 
 @csrf_exempt
 def validate_email(request):
@@ -34,6 +36,7 @@ def validate_email(request):
             return JsonResponse({"message": "Email not found"}, status=201)
     else:
         return JsonResponse({"message": "Invalid action"}, status=201)
+
 
 @csrf_exempt
 def practices(request):
@@ -61,6 +64,7 @@ def practices(request):
         return JsonResponse({"practices": practices}, status=201)
     else:
         return JsonResponse({"message": "Invalid action"}, status=201)
+
 
 @csrf_exempt
 def practices_by_id(request, id):
@@ -93,6 +97,7 @@ def practices_by_id(request, id):
     else:
         return JsonResponse({"message": "Invalid action"}, status=201)
 
+
 @csrf_exempt
 def topics(request):
     if request.method == "GET":
@@ -112,6 +117,7 @@ def topics(request):
         return JsonResponse({"topics": topics}, status=201)
     else:
         return JsonResponse({"message": "Invalid action"}, status=201)
+
 
 @csrf_exempt
 def workshops(request):
@@ -150,6 +156,7 @@ def workshops(request):
             return JsonResponse({"message": "Workshop not created"}, status=201)
     else:
         return JsonResponse({"message": "Invalid action"}, status=201)
+
 
 @csrf_exempt
 def workshops_by_id(request, id):
@@ -245,7 +252,7 @@ def courses_by_id(request, id):
         except ValueError:
             return JsonResponse({"message": "Course not found"}, status=201)
 
-    if request.method == "DELETE":
+    elif request.method == "DELETE":
         courses_ref = db.collection(u'courses').document(id)
 
         doc = courses_ref.get()
@@ -259,9 +266,11 @@ def courses_by_id(request, id):
         else:
             return JsonResponse({"message": "course not found"}, status=201)
 
-    return JsonResponse({"message": "Invalid action"}, status=201)
+    else:
+        return JsonResponse({"message": "Invalid action"}, status=201)
 
 
+@csrf_exempt
 def subjects(request):
     if request.method == "GET":
         subject_ref = db.collection(u'subjects')
@@ -279,5 +288,73 @@ def subjects(request):
             return JsonResponse(subject_dict, status=201)
         else:
             return JsonResponse({"message": "Subject not found"}, status=201)
+    else:
+        return JsonResponse({"message": "Invalid action"}, status=201)
+
+
+@csrf_exempt
+def students(request):
+    if request.method == "POST":
+        data = json.loads(request.body.decode("utf-8"))
+
+        newStudent = {
+            u'course_id': data['course_id'],
+            u'email': data['email'],
+            u'name': data['name'],
+            u'surname': data['surname'],
+        }
+
+        try:
+            student_id = str(data['id'])
+            db.collection(u'students').document(student_id).set(newStudent)
+            return JsonResponse({"message": "new student registered"}, status=201)
+        except ValueError:
+            return JsonResponse({"message": "error creating new student"}, status=201)
+    else:
+        return JsonResponse({"message": "Invalid action"}, status=201)
+
+
+@csrf_exempt
+def students_by_id(request, id):
+    if request.method == "GET":
+        try:
+            doc_ref = db.collection(u'students').where(u'course_id', u'==', id)
+            docs = doc_ref.stream()
+
+            student_dict = {}
+            students_records = []
+
+            for doc in docs:
+                docDict = doc.to_dict()
+                student = {
+                    "id": doc.id,
+                    "name": docDict['name'],
+                    "surname": docDict['surname'],
+                    "email": docDict['email'],
+                    "course_id": docDict['course_id']
+                }
+                students_records.append(student)
+
+            if len(students_records) > 0:
+                student_dict["students"] = students_records
+                return JsonResponse({"message": "Course students", "Students": student_dict}, status=201)
+            else:
+                return JsonResponse({"message": "Course doesn't have students"}, status=201)
+        except ValueError:
+            return JsonResponse({"message": "Course not found"}, status=201)
+
+    elif request.method == "DELETE":
+        students_ref = db.collection(u'students').document(id)
+
+        doc = students_ref.get()
+
+        if doc.exists:
+            try:
+                doc.reference.delete()
+                return JsonResponse({"message": "Student deleted"}, status=201)
+            except ValueError:
+                return JsonResponse({"message": "error deleting student"}, status=201)
+        else:
+            return JsonResponse({"message": "course not found"}, status=201)
     else:
         return JsonResponse({"message": "Invalid action"}, status=201)
