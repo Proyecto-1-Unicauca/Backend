@@ -7,6 +7,7 @@ urlpatterns = [
     path("practices/<str:id>", views.practices_by_id, name="practices-by-id"),
     path("topics", views.topics, name="topics"),
     path("workshops", views.workshops, name="workshops"),
+    path("courses/<str:course_id>/workshops", views.workshops_by_course_id, name="workshops-by-course-id"),
     path("workshops/<str:id>", views.workshops_by_id, name="workshops-by-id"),
     path("validate-email", views.validate_email, name="validate-email"),
     path("courses", views.courses, name="courses"),
