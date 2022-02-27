@@ -173,6 +173,28 @@ def workshops(request):
         return JsonResponse({"message": "Invalid action"}, status=201)
 
 @csrf_exempt
+def workshops_by_course_id(request, course_id):
+    if request.method == "GET":
+        users_ref = db.collection(u'workshops')
+        docs = users_ref.where(u'course_id', u'==', course_id).get()
+        workshops = []
+
+        for doc in docs:
+            docDict = doc.to_dict()
+            workshops.append({
+                "id": doc.id,
+                "topicId": docDict['topic_id'],
+                "courseId": docDict['course_id'],
+                "data": docDict['data'],
+                "startAvailable": docDict['start_available'],
+                "endAvailable": docDict['end_available']
+            })
+        
+        return JsonResponse({"workshops": workshops}, status=201)
+    else:
+        return JsonResponse({"message": "Invalid action"}, status=201)
+
+@csrf_exempt
 def workshops_by_id(request, id):
     if request.method == "GET":
         try:
