@@ -97,6 +97,32 @@ def practices_by_id(request, id):
     else:
         return JsonResponse({"message": "Invalid action"}, status=201)
 
+@csrf_exempt
+def practices_by_workshop_id(request, workshop_id):
+    if request.method == "GET":
+        users_ref = db.collection(u'practices')
+        docs = users_ref.where(u'workshop_id', u'==', workshop_id).get()
+        print(docs)
+        practices = []
+
+        for doc in docs:
+            docDict = doc.to_dict()
+            practices.append({
+                "id": doc.id,
+                "workshopId": docDict['workshop_id'],
+                "leaderId": docDict['leader_id'],
+                "students": docDict['students'],
+                "attendees": docDict['attendees'],
+                "data": docDict['data'],
+                "anomaly": docDict['anomaly'],
+                "nextAnomalyId": docDict['next_anomaly_id'],
+                "start": docDict['start'],
+                "end": docDict['end']
+            })
+        
+        return JsonResponse({"practices": practices}, status=201)
+    else:
+        return JsonResponse({"message": "Invalid action"}, status=201)
 
 @csrf_exempt
 def topics(request):
@@ -172,6 +198,7 @@ def workshops_by_course_id(request, course_id):
                 "topicId": docDict['topic_id'],
                 "courseId": docDict['course_id'],
                 "data": docDict['data'],
+                "cameras": docDict['cameras'],
                 "startAvailable": docDict['start_available'],
                 "endAvailable": docDict['end_available']
             })
