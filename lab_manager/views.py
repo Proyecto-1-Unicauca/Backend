@@ -136,6 +136,7 @@ def topics(request):
             
             topics.append({
                 "id": doc.id,
+                "constants": docDict['constants'],
                 "name": docDict['name'],
                 "subject_id": docDict['subject_id']
             })
@@ -159,6 +160,8 @@ def workshops(request):
                 "topicId": docDict['topic_id'],
                 "courseId": docDict['course_id'],
                 "data": docDict['data'],
+                "constants": docDict['constants'],
+                "cameras": docDict['cameras'],
                 "startAvailable": docDict['start_available'],
                 "endAvailable": docDict['end_available']
             })
@@ -171,6 +174,8 @@ def workshops(request):
             u'topic_id': data['topic_id'],
             u'course_id': data['course_id'],
             u'data': data['data'],
+            u'constants': data['constants'],
+            u'cameras': data['cameras'],
             u'start_available': data['start_available'],
             u'end_available': data['end_available']
         }
@@ -198,6 +203,7 @@ def workshops_by_course_id(request, course_id):
                 "topicId": docDict['topic_id'],
                 "courseId": docDict['course_id'],
                 "data": docDict['data'],
+                "constants": docDict['constants'],
                 "cameras": docDict['cameras'],
                 "startAvailable": docDict['start_available'],
                 "endAvailable": docDict['end_available']
@@ -221,6 +227,8 @@ def workshops_by_id(request, id):
                 "topicId": docDict['topic_id'],
                 "courseId": docDict['course_id'],
                 "data": docDict['data'],
+                "constants": docDict['constants'],
+                "cameras": docDict['cameras'],
                 "startAvailable": docDict['start_available'],
                 "endAvailable": docDict['end_available']
                 }
