@@ -97,6 +97,32 @@ def practices_by_id(request, id):
     else:
         return JsonResponse({"message": "Invalid action"}, status=201)
 
+@csrf_exempt
+def practices_by_workshop_id(request, workshop_id):
+    if request.method == "GET":
+        users_ref = db.collection(u'practices')
+        docs = users_ref.where(u'workshop_id', u'==', workshop_id).get()
+        print(docs)
+        practices = []
+
+        for doc in docs:
+            docDict = doc.to_dict()
+            practices.append({
+                "id": doc.id,
+                "workshopId": docDict['workshop_id'],
+                "leaderId": docDict['leader_id'],
+                "students": docDict['students'],
+                "attendees": docDict['attendees'],
+                "data": docDict['data'],
+                "anomaly": docDict['anomaly'],
+                "nextAnomalyId": docDict['next_anomaly_id'],
+                "start": docDict['start'],
+                "end": docDict['end']
+            })
+        
+        return JsonResponse({"practices": practices}, status=201)
+    else:
+        return JsonResponse({"message": "Invalid action"}, status=201)
 
 @csrf_exempt
 def topics_by_id(request,id):
@@ -131,6 +157,7 @@ def topics(request):
             
             topics.append({
                 "id": doc.id,
+                "constants": docDict['constants'],
                 "name": docDict['name'],
                 "subject_id": docDict['subject_id']
             })
@@ -154,6 +181,8 @@ def workshops(request):
                 "topicId": docDict['topic_id'],
                 "courseId": docDict['course_id'],
                 "data": docDict['data'],
+                "constants": docDict['constants'],
+                "cameras": docDict['cameras'],
                 "startAvailable": docDict['start_available'],
                 "endAvailable": docDict['end_available']
             })
@@ -166,6 +195,8 @@ def workshops(request):
             u'topic_id': data['topic_id'],
             u'course_id': data['course_id'],
             u'data': data['data'],
+            u'constants': data['constants'],
+            u'cameras': data['cameras'],
             u'start_available': data['start_available'],
             u'end_available': data['end_available']
         }
@@ -193,6 +224,8 @@ def workshops_by_course_id(request, course_id):
                 "topicId": docDict['topic_id'],
                 "courseId": docDict['course_id'],
                 "data": docDict['data'],
+                "constants": docDict['constants'],
+                "cameras": docDict['cameras'],
                 "startAvailable": docDict['start_available'],
                 "endAvailable": docDict['end_available']
             })
@@ -215,6 +248,8 @@ def workshops_by_id(request, id):
                 "topicId": docDict['topic_id'],
                 "courseId": docDict['course_id'],
                 "data": docDict['data'],
+                "constants": docDict['constants'],
+                "cameras": docDict['cameras'],
                 "startAvailable": docDict['start_available'],
                 "endAvailable": docDict['end_available']
                 }
