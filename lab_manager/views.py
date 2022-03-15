@@ -266,6 +266,7 @@ def courses(request):
             u'name': data['name'],
             u'start': data['start'],
             u'end': data['end'],
+            u'students': data['students'],
             u'teacher_id': data['teacher_id']
         }
 
@@ -322,7 +323,29 @@ def courses_by_id(request, id):
                 return JsonResponse({"message": "error deleting course"}, status=201)
         else:
             return JsonResponse({"message": "course not found"}, status=201)
+    elif request.method == "PUT":
+        course_ref = db.collection(u'courses').document(id)
+        doc = course_ref.get()
 
+        if doc.exists:
+            try:
+                data = json.loads(request.body.decode("utf-8"))
+                docDict = doc.to_dict()
+
+                course = {
+                    u'access_key': docDict['access_key'],
+                    u'name': data['name'],
+                    u'start': data['start'],
+                    u'end': data['end'],
+                    u'students': data['students'],
+                    u'subject_id': docDict['subject_id'],
+                    u'teacher_id': docDict['teacher_id']
+                }
+
+                db.collection(u'courses').document(doc.id).set(course)
+                return JsonResponse({"message": "Course updated"})
+            except ValueError:
+                return JsonResponse({"message": "error updating course"}, status=201)
     else:
         return JsonResponse({"message": "Invalid action"}, status=201)
 
