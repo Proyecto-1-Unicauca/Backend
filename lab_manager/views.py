@@ -266,7 +266,7 @@ def courses(request):
             u'name': data['name'],
             u'start': data['start'],
             u'end': data['end'],
-            u'teacher_id': 104615020640
+            u'teacher_id': data['teacher_id']
         }
 
         try:
