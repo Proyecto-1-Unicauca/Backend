@@ -134,6 +134,7 @@ def topics_by_id(request,id):
                 docDict = doc.to_dict()    
                 topic = {
                     "id": doc.id,
+                    "constants": docDict['constants'],
                     "name": docDict['name'],
                     "subject_id": docDict['subject_id']
                 }
@@ -301,6 +302,7 @@ def courses(request):
 
 @csrf_exempt
 def courses_by_id(request, id):
+    print(id);
     if request.method == "GET":
         try:
             doc_ref = db.collection(u'courses').where(u'teacher_id', u'==', int(id))
@@ -320,6 +322,7 @@ def courses_by_id(request, id):
                     "subject_id": docDict['subject_id'],
                     "teacher_id": docDict['teacher_id']
                 }
+                print(course)
                 course_records.append(course)
 
             if len(course_records) > 0:
