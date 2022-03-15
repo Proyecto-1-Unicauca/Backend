@@ -383,6 +383,7 @@ def students_by_id(request, id):
 
             for doc in docs:
                 docDict = doc.to_dict()
+                
                 student = {
                     "id": doc.id,
                     "name": docDict['name'],
@@ -413,5 +414,28 @@ def students_by_id(request, id):
                 return JsonResponse({"message": "error deleting student"}, status=201)
         else:
             return JsonResponse({"message": "course not found"}, status=201)
+    elif request.method == "PUT":
+        students_ref = db.collection(u'students').document(id)
+        doc = students_ref.get()
+
+        if doc.exists:
+            try:
+                data = json.loads(request.body.decode("utf-8"))
+                docDict = doc.to_dict()
+
+                student = {
+                    u'course_id': data['course_id'],
+                    u'email': docDict['email'],
+                    u'name': docDict['name'],
+                    u'surname': docDict['surname']
+                }
+
+                db.collection(u'students').document(doc.id).set(student)
+
+                return JsonResponse({"message": "Student updated"}, status=201)
+            except ValueError:
+                return JsonResponse({"message": "Student not updated"}, status=201)
+        else:
+            return JsonResponse({"message": "Student not found"}, status=201)
     else:
         return JsonResponse({"message": "Invalid action"}, status=201)
