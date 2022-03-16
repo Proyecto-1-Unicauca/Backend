@@ -357,12 +357,17 @@ def courses_by_id(request, id):
                 data = json.loads(request.body.decode("utf-8"))
                 docDict = doc.to_dict()
 
+                oriKey = next(iter(data['students']))
+                oriValue = next(iter(data['students'].items()))[1]
+                originalStudents = docDict['students']
+                originalStudents[oriKey] = oriValue
+
                 course = {
                     u'access_key': docDict['access_key'],
-                    u'name': data['name'],
-                    u'start': data['start'],
-                    u'end': data['end'],
-                    u'students': data['students'],
+                    u'name': docDict['name'],
+                    u'start': docDict['start'],
+                    u'end': docDict['end'],
+                    u'students': originalStudents,
                     u'subject_id': docDict['subject_id'],
                     u'teacher_id': docDict['teacher_id']
                 }
