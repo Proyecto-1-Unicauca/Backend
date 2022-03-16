@@ -22,7 +22,7 @@ def validate_email(request):
     if request.method == "POST":
         data = json.loads(request.body.decode("utf-8"))
         email = data['email']
-        teachers_ref = db.collection(u'Teachers')
+        teachers_ref = db.collection(u'teachers')
         docs = teachers_ref.stream()
         query_ref = teachers_ref.where(u'email', u'==', email).limit(1).get()
 
@@ -39,7 +39,7 @@ def validate_email(request):
 @csrf_exempt
 def practices(request):
     if request.method == "GET":
-        users_ref = db.collection(u'Practices')
+        users_ref = db.collection(u'practices')
         docs = users_ref.stream()
         practices = []
 
@@ -68,7 +68,7 @@ def practices(request):
 def practices_by_id(request, id):
     if request.method == "GET":
         try:
-            doc_ref = db.collection(u'Practices').document(id)
+            doc_ref = db.collection(u'practices').document(id)
             doc = doc_ref.get()
 
             if doc.exists:
@@ -99,7 +99,7 @@ def practices_by_id(request, id):
 @csrf_exempt
 def practices_by_workshop_id(request, workshop_id):
     if request.method == "GET":
-        users_ref = db.collection(u'Practices')
+        users_ref = db.collection(u'practices')
         docs = users_ref.where(u'workshop_id', u'==', workshop_id).get()
         print(docs)
         practices = []
@@ -128,7 +128,7 @@ def practices_by_workshop_id(request, workshop_id):
 def topics_by_id(request,id):
     if request.method == "GET":
         try:
-            doc_ref = db.collection(u'Topics').document(id)
+            doc_ref = db.collection(u'topics').document(id)
             doc = doc_ref.get()
             if doc.exists:
                 docDict = doc.to_dict()    
@@ -150,7 +150,7 @@ def topics_by_id(request,id):
 @csrf_exempt
 def topics(request):
     if request.method == "GET":
-        users_ref = db.collection(u'Topics')
+        users_ref = db.collection(u'topics')
         docs = users_ref.stream()
         topics = []
 
@@ -172,7 +172,7 @@ def topics(request):
 @csrf_exempt
 def workshops(request):
     if request.method == "GET":
-        users_ref = db.collection(u'Workshops')
+        users_ref = db.collection(u'workshops')
         docs = users_ref.stream()
         workshops = []
 
@@ -204,7 +204,7 @@ def workshops(request):
         }
 
         try:
-            db.collection(u'Workshops').add(newWorkshop)
+            db.collection(u'workshops').add(newWorkshop)
             return JsonResponse({"message": "Workshop created"}, status=201)
         except ValueError:
             return JsonResponse({"message": "Workshop not created"}, status=201)
@@ -215,7 +215,7 @@ def workshops(request):
 @csrf_exempt
 def workshops_by_course_id(request, course_id):
     if request.method == "GET":
-        users_ref = db.collection(u'Workshops')
+        users_ref = db.collection(u'workshops')
         docs = users_ref.where(u'course_id', u'==', course_id).get()
         workshops = []
 
@@ -241,20 +241,20 @@ def workshops_by_course_id(request, course_id):
 def workshops_by_id(request, id):
     if request.method == "GET":
         try:
-            doc_ref = db.collection(u'Workshops').document(id)
+            doc_ref = db.collection(u'workshops').document(id)
             doc = doc_ref.get()
 
             if doc.exists:
                 docDict = doc.to_dict()
                 workshop = {
-                    "id": doc.id,
-                    "topicId": docDict['topic_id'],
-                    "courseId": docDict['course_id'],
-                    "data": docDict['data'],
-                    "constants": docDict['constants'],
-                    "cameras": docDict['cameras'],
-                    "startAvailable": docDict['start_available'],
-                    "endAvailable": docDict['end_available']
+                "id": doc.id,
+                "topicId": docDict['topic_id'],
+                "courseId": docDict['course_id'],
+                "data": docDict['data'],
+                "constants": docDict['constants'],
+                "cameras": docDict['cameras'],
+                "startAvailable": docDict['start_available'],
+                "endAvailable": docDict['end_available']
                 }
                 
                 return JsonResponse({"message": "Workshop found", "workshop": workshop}, status=201)
@@ -264,11 +264,11 @@ def workshops_by_id(request, id):
             return JsonResponse({"message": "Workshop not found"}, status=201)
     elif request.method == "DELETE":
         try:
-            doc_ref = db.collection(u'Workshops').document(id)
+            doc_ref = db.collection(u'workshops').document(id)
             doc = doc_ref.get()
 
             if doc.exists:
-                db.collection(u'Workshops').document(id).delete()
+                db.collection(u'workshops').document(id).delete()
                 return JsonResponse({"message": "Workshop deleted"}, status=201)
             else:
                 return JsonResponse({"message": "Workshop not found"}, status=201)
@@ -295,7 +295,7 @@ def courses(request):
         }
 
         try:
-            db.collection(u'Courses').add(newCourse)
+            db.collection(u'courses').add(newCourse)
             return JsonResponse({"message": "new course registered"}, status=201)
         except ValueError:
             return JsonResponse({"message": "error creating new subject"}, status=201)
@@ -307,7 +307,7 @@ def courses(request):
 def course_by_id(request, id):
     if request.method == "GET":
         try:
-            doc_ref = db.collection(u'Courses').document(id)
+            doc_ref = db.collection(u'courses').document(id)
             doc = doc_ref.get()
 
             if doc.exists:
@@ -336,7 +336,7 @@ def courses_by_id(request, id):
     print(id);
     if request.method == "GET":
         try:
-            doc_ref = db.collection(u'Courses').where(u'teacher_id', u'==', int(id))
+            doc_ref = db.collection(u'courses').where(u'teacher_id', u'==', int(id))
             docs = doc_ref.stream()
 
             course_dict = {}
@@ -366,7 +366,7 @@ def courses_by_id(request, id):
             return JsonResponse({"message": "Course not found"}, status=201)
 
     elif request.method == "DELETE":
-        courses_ref = db.collection(u'Courses').document(id)
+        courses_ref = db.collection(u'courses').document(id)
 
         doc = courses_ref.get()
 
@@ -379,7 +379,7 @@ def courses_by_id(request, id):
         else:
             return JsonResponse({"message": "course not found"}, status=201)
     elif request.method == "PUT":
-        course_ref = db.collection(u'Courses').document(id)
+        course_ref = db.collection(u'courses').document(id)
         doc = course_ref.get()
 
         if doc.exists:
@@ -402,7 +402,7 @@ def courses_by_id(request, id):
                     u'teacher_id': docDict['teacher_id']
                 }
 
-                db.collection(u'Courses').document(doc.id).set(course)
+                db.collection(u'courses').document(doc.id).set(course)
                 return JsonResponse({"message": "Course updated"})
             except ValueError:
                 return JsonResponse({"message": "error updating course"}, status=201)
@@ -413,7 +413,7 @@ def courses_by_id(request, id):
 @csrf_exempt
 def subjects(request):
     if request.method == "GET":
-        subject_ref = db.collection(u'Subjects')
+        subject_ref = db.collection(u'subjects')
         query_ref = subject_ref.get()
 
         subject_dict = {}
@@ -446,12 +446,12 @@ def students(request):
 
         try:
             student_id = str(data['id'])
-            db.collection(u'Students').document(student_id).set(newStudent)
+            db.collection(u'students').document(student_id).set(newStudent)
             return JsonResponse({"message": "new student registered"}, status=201)
         except ValueError:
             return JsonResponse({"message": "error creating new student"}, status=201)
     elif request.method == "GET":
-        student_ref = db.collection(u'Students')
+        student_ref = db.collection(u'students')
         query_ref = student_ref.get()
 
         student_dict = {}
@@ -482,7 +482,7 @@ def students(request):
 def students_by_id_student(request, id):
     if request.method == "GET":
         try:
-            doc_ref = db.collection(u'Students').document(id)
+            doc_ref = db.collection(u'students').document(id)
             doc = doc_ref.get()
             if doc.exists:
                 docDict = doc.to_dict()    
@@ -506,7 +506,7 @@ def students_by_id_student(request, id):
 def students_by_id(request, id):
     if request.method == "GET":
         try:
-            doc_ref = db.collection(u'Students').where(u'course_id', u'==', id)
+            doc_ref = db.collection(u'students').where(u'course_id', u'==', id)
             docs = doc_ref.stream()
 
             student_dict = {}
@@ -533,7 +533,7 @@ def students_by_id(request, id):
             return JsonResponse({"message": "Course not found"}, status=201)
 
     elif request.method == "DELETE":
-        students_ref = db.collection(u'Students').document(id)
+        students_ref = db.collection(u'students').document(id)
 
         doc = students_ref.get()
 
@@ -546,7 +546,7 @@ def students_by_id(request, id):
         else:
             return JsonResponse({"message": "course not found"}, status=201)
     elif request.method == "PUT":
-        students_ref = db.collection(u'Students').document(id)
+        students_ref = db.collection(u'students').document(id)
         doc = students_ref.get()
 
         if doc.exists:
@@ -563,7 +563,7 @@ def students_by_id(request, id):
                     u'surname': docDict['surname']
                 }
 
-                db.collection(u'Students').document(doc.id).set(student)
+                db.collection(u'students').document(doc.id).set(student)
 
                 return JsonResponse({"message": "Student updated"}, status=201)
             except ValueError:
