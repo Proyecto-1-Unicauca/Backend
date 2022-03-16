@@ -1,4 +1,3 @@
-import google.cloud.firestore_v1.field_path
 from django.shortcuts import render
 from django.utils.crypto import get_random_string
 from django.views.decorators.csrf import csrf_exempt
@@ -8,7 +7,6 @@ import json
 import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import firestore
-from google.cloud.firestore_v1.field_path import FieldPath
 
 cred = credentials.Certificate('PrivateKey.json')
 firebase_admin.initialize_app(cred)
@@ -97,6 +95,7 @@ def practices_by_id(request, id):
     else:
         return JsonResponse({"message": "Invalid action"}, status=201)
 
+
 @csrf_exempt
 def practices_by_workshop_id(request, workshop_id):
     if request.method == "GET":
@@ -124,6 +123,7 @@ def practices_by_workshop_id(request, workshop_id):
     else:
         return JsonResponse({"message": "Invalid action"}, status=201)
 
+
 @csrf_exempt
 def topics_by_id(request,id):
     if request.method == "GET":
@@ -145,6 +145,7 @@ def topics_by_id(request,id):
             return JsonResponse({"message": "Topic not found"}, status=201)
     else:
         return JsonResponse({"message": "Invalid action"}, status=201)
+
 
 @csrf_exempt
 def topics(request):
@@ -235,6 +236,7 @@ def workshops_by_course_id(request, course_id):
     else:
         return JsonResponse({"message": "Invalid action"}, status=201)
 
+
 @csrf_exempt
 def workshops_by_id(request, id):
     if request.method == "GET":
@@ -301,7 +303,6 @@ def courses(request):
         return JsonResponse({"message": "Invalid action"}, status=201)
 
 
-
 @csrf_exempt
 def courses_by_id(request, id):
     print(id);
@@ -321,6 +322,7 @@ def courses_by_id(request, id):
                     "access_key": docDict['access_key'],
                     "start_date": docDict['start'],
                     "end_date": docDict['end'],
+                    "students": docDict['students'],
                     "subject_id": docDict['subject_id'],
                     "teacher_id": docDict['teacher_id']
                 }
