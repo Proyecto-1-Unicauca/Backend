@@ -494,9 +494,11 @@ def students_by_id(request, id):
             try:
                 data = json.loads(request.body.decode("utf-8"))
                 docDict = doc.to_dict()
+                courses = docDict['course_id']
+                courses.append(data['course_id'])
 
                 student = {
-                    u'course_id': data['course_id'],
+                    u'course_id': courses,
                     u'email': docDict['email'],
                     u'name': docDict['name'],
                     u'surname': docDict['surname']
