@@ -14,6 +14,7 @@ urlpatterns = [
     path("validate-email", views.validate_email, name="validate-email"),
     path("courses", views.courses, name="courses"),
     path("courses/<str:id>", views.courses_by_id, name="courses_by_id"),
+    path("course/<str:id>", views.course_by_id, name="course_by_id"),
     path("subjects", views.subjects, name="subjects"),
     path("students", views.students, name="students"),
     path("students/<str:id>", views.students_by_id, name="students_by_id"),

@@ -304,6 +304,34 @@ def courses(request):
 
 
 @csrf_exempt
+def course_by_id(request, id):
+    if request.method == "GET":
+        try:
+            doc_ref = db.collection(u'courses').document(id)
+            doc = doc_ref.get()
+
+            if doc.exists:
+                docDict = doc.to_dict()
+                course = {
+                    "name": docDict['name'],
+                    "access_key": docDict['access_key'],
+                    "start_date": docDict['start'],
+                    "end_date": docDict['end'],
+                    "students": docDict['students'],
+                    "subject_id": docDict['subject_id'],
+                    "teacher_id": docDict['teacher_id']
+                }
+
+                return JsonResponse({"message": "Course found", "Course" : course}, status=201)
+            else:
+                return JsonResponse({"message": "Course not found"}, status=201)
+        except ValueError:
+            return JsonResponse({"message": "Course not found"}, status=201)
+    else:
+        return JsonResponse({"message": "Invalid action"}, status=201)
+
+
+@csrf_exempt
 def courses_by_id(request, id):
     print(id);
     if request.method == "GET":
