@@ -301,6 +301,7 @@ def courses(request):
         return JsonResponse({"message": "Invalid action"}, status=201)
 
 
+
 @csrf_exempt
 def courses_by_id(request, id):
     print(id);
@@ -414,6 +415,30 @@ def students(request):
             return JsonResponse({"message": "new student registered"}, status=201)
         except ValueError:
             return JsonResponse({"message": "error creating new student"}, status=201)
+    else:
+        return JsonResponse({"message": "Invalid action"}, status=201)
+
+
+@csrf_exempt
+def students_by_id_student(request, id):
+    if request.method == "GET":
+        try:
+            doc_ref = db.collection(u'students').document(id)
+            doc = doc_ref.get()
+            if doc.exists:
+                docDict = doc.to_dict()    
+                student = {
+                    "id": doc.id,
+                    "name": docDict['name'],
+                    "surname": docDict['surname'],
+                    "email": docDict['email'],
+                    "course_id": docDict['course_id']
+                }
+                return JsonResponse({"message": "Student found", "student": student}, status=201)
+            else:
+                return JsonResponse({"message": "Student not found"}, status=201)
+        except ValueError:
+            return JsonResponse({"message": "Student not found"}, status=201)
     else:
         return JsonResponse({"message": "Invalid action"}, status=201)
 
