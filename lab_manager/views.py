@@ -450,6 +450,30 @@ def students(request):
             return JsonResponse({"message": "new student registered"}, status=201)
         except ValueError:
             return JsonResponse({"message": "error creating new student"}, status=201)
+    elif request.method == "GET":
+        student_ref = db.collection(u'students')
+        query_ref = student_ref.get()
+
+        student_dict = {}
+        student_records = []
+
+        if query_ref:
+            for student in query_ref:
+                studentDict = student.to_dict()
+                student = {
+                    "student_id": student.id,
+                    "course_id": studentDict['course_id'],
+                    "email": studentDict['email'],
+                    "name": studentDict['name'],
+                    "surname": studentDict['surname']
+                }
+                student_records.append(student)
+
+            if len(student_records) > 0:
+                student_dict["students"] = student_records
+                return JsonResponse({"message": "Students found", "Students": student_dict}, status=201)
+            else:
+                return JsonResponse({"message": "No students found"}, status=201)
     else:
         return JsonResponse({"message": "Invalid action"}, status=201)
 
